@@ -1,5 +1,7 @@
 package com.codecool.gladiator.view;
 
+import org.w3c.dom.ls.LSOutput;
+
 /**
  * Interface used for basic View functionality (displaying text)
  */
@@ -9,7 +11,8 @@ public interface Viewable {
      *
      * @param text the text to be displayed
      */
-    void display(String text);
+    void display(String text) ;
+
 
     /**
      * Asks the user for a number between min and max and returns it

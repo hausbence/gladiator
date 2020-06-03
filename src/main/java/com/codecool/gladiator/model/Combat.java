@@ -1,6 +1,7 @@
 package com.codecool.gladiator.model;
 
 import com.codecool.gladiator.model.gladiators.Gladiator;
+import com.codecool.gladiator.util.RandomUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +29,51 @@ public class Combat {
      * @return winner of combat
      */
     public Gladiator simulate() {
-        // Todo
+        RandomUtils random = new RandomUtils();
+        int getFirstPlayer = random.nextInt(2);
+        boolean glad1Turn = false;
+        if (getFirstPlayer == 0) {
+            glad1Turn = true;
+        }
+        int gladiator1HP = gladiator1.getBaseHp();
+        int gladiator2HP = gladiator2.getBaseHp();
+        while (gladiator1HP > 0 && gladiator2HP > 0) {
+            if (glad1Turn) {
+                gladiator2HP = attack(gladiator1, gladiator2, gladiator2HP);
+                glad1Turn = false;
+            }
+            else {
+                gladiator1HP = attack(gladiator2, gladiator1, gladiator1HP);
+                glad1Turn = true;
+            }
+        }
+        if (gladiator1HP < 0) {
+            return gladiator2;
+        }
         return gladiator1;
+    }
+
+    private int attack(Gladiator attacker, Gladiator defender, int defHp) {
+        RandomUtils random = new RandomUtils();
+        int chanceToHit = attacker.getBaseDex() - defender.getBaseDex();
+        if (chanceToHit > 100) {
+            chanceToHit = 100;
+        } else if (chanceToHit < 10) {
+            chanceToHit = 10;
+        }
+
+        int randomNum = random.nextInt(100);
+        if (randomNum < 100 - chanceToHit) {
+            combatLog.add(attacker.getFullName() + " misses");
+        } else {
+            int MInt = random.nextInt(4) + 1;
+            double M = MInt / 10.0;
+            int damage = (int) Math.round(attacker.getBaseSp() * M);
+            combatLog.add(attacker.getFullName() + " deals " + damage + " damage, "
+                    + defender.getFullName() + " has " + (defHp - damage) + " remaining health");
+            return defHp - damage;
+        }
+        return defHp;
     }
 
     public Gladiator getGladiator1() {

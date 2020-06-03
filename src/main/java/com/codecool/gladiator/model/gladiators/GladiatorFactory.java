@@ -1,9 +1,12 @@
 package com.codecool.gladiator.model.gladiators;
 
+import com.codecool.gladiator.util.RandomUtils;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.Random;
 
 public class GladiatorFactory {
 
@@ -24,9 +27,10 @@ public class GladiatorFactory {
      *
      * @return gladiator name
      */
-    private String getRandomName() {
-        // Todo
-        return "Brutus";
+    public String getRandomName() {
+        RandomUtils rand = new RandomUtils();
+        int randomIndex = rand.nextInt(names.size());
+        return names.get(randomIndex);
     }
 
     /**
@@ -36,7 +40,29 @@ public class GladiatorFactory {
      * @return new Gladiator
      */
     public Gladiator generateRandomGladiator() {
-        // Todo
-        return new Brutal(getRandomName(), 50, 50, 50, 1);
+        int low = 25;
+        int high = 100;
+
+        RandomUtils random = new RandomUtils();
+
+        int SwitchNumber = random.nextInt(5) + 1;
+        int levelNumber = random.nextInt(5 - 1) + 1;
+        int BaseHP = random.nextInt(high-low) + low;
+        int BaseSP = random.nextInt(high-low) + low;
+        int BaseDex = random.nextInt(high-low) + low;
+
+        switch (SwitchNumber){
+            case 1:
+                return new Brutal(getRandomName(), BaseHP, BaseSP, BaseDex, levelNumber);
+            case 2:
+                return new Archer(getRandomName(), BaseHP, BaseSP, BaseDex, levelNumber);
+            case 3:
+                return new Assassin(getRandomName(), BaseHP, BaseSP, BaseDex, levelNumber);
+            case 4:
+                return new Swordsman(getRandomName(), BaseHP, BaseSP, BaseDex, levelNumber);
+            case 5:
+                return new Swordsman(getRandomName(), BaseHP, BaseSP, BaseDex, levelNumber);
+        }
+        return new Brutal(getRandomName(), BaseHP, BaseSP, BaseDex, levelNumber);
     }
 }
